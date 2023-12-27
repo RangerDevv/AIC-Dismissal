@@ -2,8 +2,34 @@
     import "../app.css";
     import { appwriteUser } from "$lib/appwrite";
 
-    let currSesh = appwriteUser.getSession('current');
-    console.log(currSesh);
+    export let isLoggedIn = false;
+
+    async function sesh(){ 
+        appwriteUser.getSession('current').then((res) => {
+        console.log('ye')
+        console.log(res);
+        isLoggedIn = true;
+        return res;
+        }).catch((err) => {
+        console.log(err);
+        isLoggedIn = false;
+        return err;
+        });
+    }
+
+    sesh();
+
+    function logout(){
+        appwriteUser.deleteSession('current').then((res) => {
+        console.log(res);
+        isLoggedIn = false;
+        return res;
+        }).catch((err) => {
+        console.log(err);
+        isLoggedIn = false;
+        return err;
+        });
+    }
 </script>
 
 <main>
@@ -13,8 +39,13 @@
         </div>
         <div class="flex flex-row gap-3">
             <a href="/"><button class="btn btn-primary">Home</button></a>
+            {#if !isLoggedIn}
             <a href="/loginRegister/register"><button class="btn btn-primary">Register</button></a>
             <a href="/loginRegister/login"><button class="btn">Login</button></a>
+            {/if}
+            {#if isLoggedIn}
+            <button class="btn btn-primary" on:click={logout}>Logout</button>
+            {/if}
         </div>
     </nav>
     <slot />
