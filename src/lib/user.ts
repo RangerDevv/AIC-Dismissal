@@ -1,22 +1,32 @@
 import { goto } from '$app/navigation';
-import { appwriteUser } from './appwrite';
+import { appwriteUser,appwriteDatabases } from './appwrite';
 import { ID } from 'appwrite';
+import { DB_ID,COLLECTION } from './ids';
 import { writable,get } from 'svelte/store';
 
-export const currUser = writable(null);
-export const getCurrUser = get(currUser);
+let uuid = '';
 
 
-export async function register(email:any, password:any, name:any) {
+
+export async function register(email:any, password:any, name:any, birthDate:any) {
     try {
-        await appwriteUser.create(ID.unique(),email, password,name).then((res:any) => {
-            console.log(res);
-            currUser.set(res);
-
-            console.log(getCurrUser);
+        await appwriteUser.create(ID.unique(),email, password,name).then((res:any) =>{
+            login(email, password).then(async (res:any) => {
+            appwriteUser.get().then((res:any) => {
+                uuid = res.$id;
+            });
+            appwriteDatabases.createDocument(DB_ID, COLLECTION.Parents,ID.unique(), {
+                Name: name,
+                DOB: birthDate,
+                uid: uuid,
+            }).then((res:any) => {
+                console.log(res);
+                goto("/dashboard/parentDash");
+            }
+            );
         });
-
-        goto("/");
+            console.log(res);
+        });
     } catch (error) {
         console.error(error);
     }
@@ -26,14 +36,9 @@ export async function login(email:any, password:any) {
     try {
         await appwriteUser.createEmailSession(email, password).then((res:any) => {
             console.log(res);
-            currUser.set(res);
-
-            console.log(getCurrUser);
-
-            document.cookie = `session=${res}; path=/`;
         });
 
-        goto("/");
+        goto("/dashboard/parentDash");
     } catch (error) {
         console.error(error);
     }

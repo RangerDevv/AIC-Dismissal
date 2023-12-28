@@ -4,9 +4,10 @@
     let email = "";
     let name = "";
     let password = "";
+    let date = "";
 
     function registerUser() {
-        register(email, password,name);
+        register(email, password,name,date);
     }
 
 </script>
@@ -22,6 +23,8 @@
         <input type="text" id="name" bind:value={name} />
         <label for="password">Password</label>
         <input type="password" id="password" bind:value={password} />
+        <label for="date">Date of Birth</label>
+        <input type="date" id="date" bind:value={date} />
         <button class="btn btn-success" type="submit">Register</button>
     </form>
 
