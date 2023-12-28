@@ -2,7 +2,7 @@
     import { appwriteDatabases,appwriteUser,appwriteClient } from "$lib/appwrite";
     import { DB_ID,COLLECTION } from "$lib/ids";
     import { Query,ID } from "appwrite";
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
 
     let uuid = '';
     let parentDBID = '';
@@ -69,19 +69,20 @@
         });
     }
 
-    async function checkIsSent() {
-        await appwriteDatabases.listDocuments(DB_ID,COLLECTION.Students,[Query.equal('parents',[parentDBID])]).then((res) => {
-            console.log(res);
-            children = res.documents;
-        }).catch((err) => {
-            console.log(err);
-        });
-    }
-
-    appwriteClient.subscribe('databases.'+DB_ID+'.collections.'+COLLECTION.Students+'.documents', res => {
+    const unsubscribe = appwriteClient.subscribe('databases.'+DB_ID+'.collections.'+COLLECTION.Students+'.documents', res => {
         console.log('update');
-        console.log(res);
-        checkIsSent();
+        // find the child using $id that was updated and update it in the array
+        const payload = res.payload as any;
+        children.find((child) => child.$id == payload.$id).Sent = payload.Sent;
+        // refresh the array
+        children = [...children];
+        console.log(children.length);
+    });
+
+    onMount(() => {
+        return () => {
+            unsubscribe();
+        };
     });
 </script>
 

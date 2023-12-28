@@ -24,10 +24,20 @@
 
     
         
-    appwriteClient.subscribe('databases.'+DB_ID+'.collections.'+COLLECTION.Parents+'.documents', res => {
+    const unsubscribe = appwriteClient.subscribe('databases.'+DB_ID+'.collections.'+COLLECTION.Parents+'.documents', res => {
         console.log('update');
         console.log(res);
-        getClass();
+        console.log(classStudents);
+        const payload = res.payload as any;
+        classStudents.find((child) => child.parents.$id == payload.$id).parents.Arrived = payload.Arrived;
+        // refresh the array
+        classStudents = [...classStudents];
+    });
+
+    onMount(() => {
+        return () => {
+            unsubscribe();
+        };
     });
 
 
