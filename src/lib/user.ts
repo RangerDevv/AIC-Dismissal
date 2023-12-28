@@ -14,16 +14,16 @@ export async function register(email:any, password:any, name:any, birthDate:any)
             login(email, password).then(async (res:any) => {
             appwriteUser.get().then((res:any) => {
                 uuid = res.$id;
+                appwriteDatabases.createDocument(DB_ID, COLLECTION.Parents,ID.unique(), {
+                    Name: name,
+                    DOB: birthDate,
+                    uid: uuid,
+                }).then((res:any) => {
+                    console.log(res);
+                    goto("/dashboard/parentDash");
+                }
+                );
             });
-            appwriteDatabases.createDocument(DB_ID, COLLECTION.Parents,ID.unique(), {
-                Name: name,
-                DOB: birthDate,
-                uid: uuid,
-            }).then((res:any) => {
-                console.log(res);
-                goto("/dashboard/parentDash");
-            }
-            );
         });
             console.log(res);
         });

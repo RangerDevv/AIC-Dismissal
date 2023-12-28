@@ -11,7 +11,7 @@
 
     async function getClass() {
         await appwriteDatabases.getDocument(DB_ID,COLLECTION.Class,data.classID).then((res) => {
-            console.log(res);
+            // console.log(res);
             classStudents = res['students'];
             className = res['Name'];
             console.log(classStudents);
@@ -25,8 +25,8 @@
     
         
     const unsubscribe = appwriteClient.subscribe('databases.'+DB_ID+'.collections.'+COLLECTION.Parents+'.documents', res => {
-        console.log('update');
-        console.log(res);
+        // console.log('update');
+        // console.log(res);
         console.log(classStudents);
         const payload = res.payload as any;
         classStudents.find((child) => child.parents.$id == payload.$id).parents.Arrived = payload.Arrived;
@@ -47,7 +47,7 @@
                 Sent:e.target.checked
             }
         ).then((res) => {
-            console.log(res);
+            // console.log(res);
         }).catch((err) => {
             console.log(err);
         });
@@ -55,7 +55,10 @@
 </script>
 
 <main>
-    <h1 class="text-3xl font-bold text-center pt-5">{className}</h1>
+    <div class="flex flex-row justify-evenly items-center bg-base rounded-lg p-3">
+        <a href="/dashboard/teacherDash"><button class="btn btn-error">Back</button></a>
+        <h1 class="text-3xl font-bold text-center">{className}</h1>
+    </div>
     <div class="flex flex-col items-center justify-center">
         <div class="flex flex-col gap-3 w-full">
             <div class="flex flex-row pb-2">
@@ -75,7 +78,7 @@
         <div class="flex flex-row p-3">
             <div class="flex-1 flex flex-row gap-4">
                 <input type="checkbox" class="checkbox checkbox-success rounded-full disabled:opacity-100 disabled:bg-transparent outline" checked={student.parents.Arrived} disabled>
-                <div class="flex flex-col gap-1">
+                <div class="flex flex-col gap-1 pl-4">
                 <h2 class="text-xl">{student.Name}</h2>
                 <!-- get the parents[0] Name array inside the students array -->
                 <h3 class="text-sm">Parent: {student.parents.Name}</h3>

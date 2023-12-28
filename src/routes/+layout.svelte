@@ -1,15 +1,22 @@
 <script lang='ts'>
     import "../app.css";
-    import { appwriteUser } from "$lib/appwrite";
+    import { appwriteUser,appwriteDatabases } from "$lib/appwrite";
+    import { DB_ID,COLLECTION } from "$lib/ids";
     import { goto } from "$app/navigation";
+    import { Query } from "appwrite";
 
     export let isLoggedIn = false;
+    let teacher = false;
 
     async function sesh(){ 
         appwriteUser.getSession('current').then((res) => {
-        console.log('ye')
         appwriteUser.get().then((res) => {
-            console.log(res);
+            // console.log(res);
+                appwriteDatabases.listDocuments(DB_ID,COLLECTION.Parents,[Query.equal('uid',[res['$id']])]).then((res:any) => {
+                    teacher = res['documents'][0]['isTeacher'];
+                }).catch((err) => {
+                    console.log(err);
+                });
         }).catch((err) => {
             console.log(err);
         });
@@ -51,7 +58,9 @@
             {/if}
             {#if isLoggedIn}
             <a href="/dashboard/parentDash"><button class="btn btn-primary">Home</button></a>
-            <a href="/dashboard/teacherDash/658c81599273893f19ea"><button class="btn">Go to Classroom</button></a>
+            {#if teacher}
+            <a href="/dashboard/teacherDash/"><button class="btn">Go to Classroom</button></a>
+            {/if}
             <button class="btn btn-primary" on:click={logout}>Logout</button>
             {/if}
         </div>
