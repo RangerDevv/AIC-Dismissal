@@ -1,11 +1,13 @@
 <script lang="ts">
-    import { appwriteDatabases,appwriteUser } from "$lib/appwrite";
+    import { appwriteDatabases,appwriteUser,appwriteClient } from "$lib/appwrite";
     import { DB_ID,COLLECTION } from "$lib/ids";
     import { Query,ID } from "appwrite";
+    import { onMount } from "svelte";
 
     let uuid = '';
     let parentDBID = '';
     let children = [] as any[];
+    let arrivedBool = false;
 
     let newChildName = '';
     let newChildClass = '';
@@ -39,6 +41,7 @@
             uuid = res['$id'];
             console.log('UUID '+uuid);
             appwriteDatabases.listDocuments(DB_ID,COLLECTION.Parents,[Query.equal('uid',[uuid])]).then((res) => {
+                arrivedBool = res.documents[0]['Arrived'];
                 parentDBID = res.documents[0]['$id'];
                 children = res.documents[0]['students'];
                 console.log(children);
@@ -50,7 +53,9 @@
         });
     }
 
-    getChildren();
+    onMount(async () =>{ 
+        getChildren();
+    });
 
     async function isArrived(e:any) {
         await appwriteDatabases.updateDocument(DB_ID,COLLECTION.Parents,parentDBID,
@@ -63,6 +68,21 @@
             console.log(err);
         });
     }
+
+    async function checkIsSent() {
+        await appwriteDatabases.listDocuments(DB_ID,COLLECTION.Students,[Query.equal('parents',[parentDBID])]).then((res) => {
+            console.log(res);
+            children = res.documents;
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+
+    appwriteClient.subscribe('databases.'+DB_ID+'.collections.'+COLLECTION.Students+'.documents', res => {
+        console.log('update');
+        console.log(res);
+        checkIsSent();
+    });
 </script>
 
 <main>
@@ -73,22 +93,55 @@
     <h1 class="text-3xl font-bold text-center pt-5">You have no children</h1>
     {:else}
     <h1 class="text-3xl font-bold text-center pt-5 mb-4">Your Children</h1>
+
+    <div class="flex flex-col items-center justify-center">
+        <div class="flex flex-col gap-3 w-full">
+            <div class="flex flex-row pb-2">
+                <div class="flex-1 pl-5">
+                    <h1 class="font-bold">Name</h1>
+                </div>
+                <div class="flex flex-row gap-3 pr-4">
+                    <!-- <button class="btn btn-success">Arrived</button> -->
+                    <p class="font-bold">Arrived</p>
+                </div>
+            </div>
+        </div>
+    </div>
     {#each children as child}
     <!-- if the array is empty say that you have no children -->
     <div class="flex flex-col items-center justify-center">
         <div class="flex flex-col gap-3 w-full">
             <div class="flex flex-row pb-3">
                 <div class="flex-1 pl-5">
-                    <h1 class="text-2xl font-bold pt-5">{child.Name}</h1>
+                    <h1 class="text-2xl pt-5">{child.Name}</h1>
+                    <h2 class="text-sm">{child.class.Name}</h2>
                 </div>
-                <div class="flex flex-row gap-3 pr-4">
-                    <button class="btn btn-error">Late</button>
+                <div class="flex flex-row gap-10 pr-4">
                     <!-- <button class="btn btn-success">Arrived</button> -->
-                    <input type="checkbox" id="{child.Name}" name="{child.Name}" value="{child.$id}" checked={child.Sent} class='checkbox checkbox-success rounded-full' on:change={isArrived}>
+                    <input type="checkbox" bind:checked={arrivedBool} id="{child.Name}" name="{child.Name}" value="{child.$id}"  class='checkbox checkbox-success rounded-full' on:change={isArrived}>
                 </div>
             </div>
         </div>
     </div>
+    {/each}
+    {/if}
+
+    <h1 class="text-3xl font-bold text-center pt-5 mb-4">Children Status</h1>
+    {#if children.length == 0}
+    <h1 class="text-3xl font-bold text-center pt-5">You have no children</h1>
+    {:else}
+    {#each children as child}
+        {#if child.Sent}
+        <div class="flex flex-row gap-2 mx-auto pb-2 justify-start pl-10 items-center">
+            <input type="checkbox" class="checkbox checkbox-success rounded-full disabled:opacity-100 disabled:bg-red-700" checked={child.Sent} disabled>
+            <p>{child.Name} has been sent</p>
+        </div>
+        {:else}
+        <div class="flex flex-row gap-2 mx-auto pb-2 justify-start pl-10 items-center">
+            <input type="checkbox" class="checkbox checkbox-success rounded-full disabled:opacity-100 disabled:bg-red-700" checked={child.Sent} disabled>
+            <p>{child.Name} has not been sent yet please be patient</p>
+        </div>
+        {/if}
     {/each}
     {/if}
 </div>
