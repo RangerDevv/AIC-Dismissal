@@ -23,15 +23,21 @@
     <h1 class="text-3xl font-bold text-center pt-5">Classes</h1>
     <div class="flex flex-col items-center justify-center">
         <div class="flex flex-col gap-3 w-full">
-            {#each classList as allClass}
-            <div class="flex flex-row justify-between items-center bg-base rounded-lg p-3">
-                <div class="flex flex-col">
-                <h1 class="text-xl font-bold">{allClass.Name}</h1>
-                <h1 class="text-sm">Teacher: {allClass.Teacher}</h1>
-                </div>
-                <a href="/dashboard/teacherDash/{allClass.$id}/"><button class="btn btn-primary">View</button></a>
+            {#if classList.length === 0}
+            <div class="flex flex-col justify-start items-center pt-10">
+                <span class="loading loading-spinner loading-lg"></span>
             </div>
-            {/each}
+            {:else}
+                {#each classList as allClass}
+                <div class="flex flex-row justify-between items-center bg-base rounded-lg p-3">
+                    <div class="flex flex-col">
+                    <h1 class="text-xl font-bold">{allClass.Name}</h1>
+                    <h1 class="text-sm">Teacher: {allClass.Teacher}</h1>
+                    </div>
+                    <a href="/dashboard/teacherDash/{allClass.$id}/"><button class="btn btn-primary">View</button></a>
+                </div>
+                {/each}
+            {/if}
         </div>
     </div>
 </main>

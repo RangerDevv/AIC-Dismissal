@@ -19,34 +19,6 @@
     let isNearMosque = false;
     let isLocationAccessGranted = false;
 
-        // Check if geolocation is supported by the browser
-    if ("geolocation" in navigator) {
-    // Prompt user for permission to access their location
-    navigator.geolocation.watchPosition(
-        // Success callback function
-        function(position) {
-        // Get the user's latitude and longitude coordinates
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-
-        // Update the map with the user's new location
-        console.log(`Latitude: ${lat}, longitude: ${lng}`);
-
-        // if the user is within 100 meters of the mosque then send the notification
-        Math.sqrt(Math.pow(mosqueLat - lat, 2) + Math.pow(mosqueLng - lng, 2)) * 100000 < 100 ? isNearMosque=true : isNearMosque=false;
-        isLocationAccessGranted = true;
-        },
-        // Error callback function
-        function(error) {
-        // Handle errors, e.g. user denied location sharing permissions
-        console.error("Error getting user location:", error);
-        isLocationAccessGranted = false;
-        }
-    );
-    } else {
-    // Geolocation is not supported by the browser
-    console.error("Geolocation is not supported by this browser.");
-    }
 
     let my_modal_6 = document.getElementById('my_modal_6') as HTMLInputElement;
 
@@ -91,6 +63,34 @@
 
     onMount(async () =>{ 
         getChildren();
+            // Check if geolocation is supported by the browser
+    if ("geolocation" in navigator) {
+    // Prompt user for permission to access their location
+    isLocationAccessGranted = true;
+    navigator.geolocation.watchPosition(
+        // Success callback function
+        function(position) {
+        // Get the user's latitude and longitude coordinates
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        // Update the map with the user's new location
+        console.log(`Latitude: ${lat}, longitude: ${lng}`);
+
+        // if the user is within 100 meters of the mosque then send the notification
+        Math.sqrt(Math.pow(mosqueLat - lat, 2) + Math.pow(mosqueLng - lng, 2)) * 100000 < 100 ? isNearMosque=true : isNearMosque=false;
+        },
+        // Error callback function
+        function(error) {
+        // Handle errors, e.g. user denied location sharing permissions
+        console.error("Error getting user location:", error);
+        isLocationAccessGranted = false;
+        }
+    );
+    } else {
+    // Geolocation is not supported by the browser
+    console.error("Geolocation is not supported by this browser.");
+    }
     });
 
     async function isArrived(e:any) {
@@ -105,17 +105,17 @@
         });
     }
 
-    const unsubscribe = appwriteClient.subscribe('databases.'+DB_ID+'.collections.'+COLLECTION.Students+'.documents', res => {
+    const unsubscribe = browser ? appwriteClient.subscribe('databases.'+DB_ID+'.collections.'+COLLECTION.Students+'.documents', res => {
         // find the child using $id that was updated and update it in the array
         const payload = res.payload as any;
         children.find((child) => child.$id == payload.$id).Sent = payload.Sent;
         // refresh the array
         children = [...children];
-    });
+    }) : undefined;
 
     onMount(() => {
         return () => {
-            unsubscribe();
+            unsubscribe!();
         };
     });
 
