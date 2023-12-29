@@ -8,15 +8,17 @@
     let uuid = '';
     let parentDBID = '';
     let children = [] as any[];
-    let arrivedBool = null;
+    let arrivedBool = false;
 
     let newChildName = '';
     let newChildClass = '';
 
-    let mosqueLat = 40.409188652472295;
-    let mosqueLng = -80.08315067761669;
+    // 40.34654316095177, -80.11458151582471
+    let mosqueLat = 40.34654316095177;
+    let mosqueLng = -80.11458151582471;
+    let distanceFromMosque = 0;
 
-    let isNearMosque = false;
+    let isNearMosque = null as boolean | null;
     let isLocationAccessGranted = false;
 
 
@@ -76,9 +78,27 @@
 
         // Update the map with the user's new location
         console.log(`Latitude: ${lat}, longitude: ${lng}`);
+        console.log('Before'+ isNearMosque)
 
         // if the user is within 100 meters of the mosque then send the notification
-        Math.sqrt(Math.pow(mosqueLat - lat, 2) + Math.pow(mosqueLng - lng, 2)) * 100000 < 100 ? isNearMosque=true : isNearMosque=false;
+        let R = 6371e3; // Earth's radius in meters
+        let φ1 = lat * Math.PI/180; // Convert latitude from degrees to radians
+        let φ2 = mosqueLat * Math.PI/180; // Convert mosque latitude from degrees to radians
+        let Δφ = (mosqueLat-lat) * Math.PI/180; // Difference of latitudes
+        let Δλ = (mosqueLng-lng) * Math.PI/180; // Difference of longitudes
+
+        let a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+            Math.cos(φ1) * Math.cos(φ2) *
+            Math.sin(Δλ/2) * Math.sin(Δλ/2);
+        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        let distance = R * c; // Distance in meters
+
+        distanceFromMosque = distance;
+
+        isNearMosque = distance < 100;
+
+        console.log('After'+ isNearMosque)
         },
         // Error callback function
         function(error) {
