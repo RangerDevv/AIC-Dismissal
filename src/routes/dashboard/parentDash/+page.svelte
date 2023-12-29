@@ -161,7 +161,11 @@
                     {:else}
                     <div class="flex flex-col just-end items-end">
                     <p class="">You are not close to the mosque yet!</p>
+                    {#if arrivedBool}
+                    <label for="notify" class="btn btn-ghost outline outline-green-600 text-green-600 m-6" id="warning">Notified</label>
+                    {:else}
                     <label for="notify" class="btn btn-ghost outline outline-rose-600 text-rose-600 m-6" id="warning">Notify Anyway</label>
+                    {/if}
                     </div>
                     <input type="checkbox" id="notify" class="modal-toggle" />
                     <div class="modal" role="dialog">
