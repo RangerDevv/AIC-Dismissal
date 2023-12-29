@@ -13,9 +13,9 @@
     let newChildName = '';
     let newChildClass = '';
 
-    // 40.34654316095177, -80.11458151582471
-    let mosqueLat = 40.34654316095177;
-    let mosqueLng = -80.11458151582471;
+    // 40.36811998939977, -80.17784797235736
+    let mosqueLat = 40.36811998939977;
+    let mosqueLng = -80.17784797235736;
     let distanceFromMosque = 0;
 
     let isNearMosque = null as boolean | null;
