@@ -8,7 +8,7 @@
     let uuid = '';
     let parentDBID = '';
     let children = [] as any[];
-    let arrivedBool = false;
+    let arrivedBool = null;
 
     let newChildName = '';
     let newChildClass = '';
