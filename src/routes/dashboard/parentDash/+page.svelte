@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { browser } from "$app/environment";
     import { appwriteDatabases,appwriteUser,appwriteClient } from "$lib/appwrite";
     import { DB_ID,COLLECTION } from "$lib/ids";
     import { Query,ID } from "appwrite";
