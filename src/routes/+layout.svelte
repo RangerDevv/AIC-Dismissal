@@ -4,6 +4,7 @@
     import { DB_ID,COLLECTION } from "$lib/ids";
     import { goto } from "$app/navigation";
     import { Query } from "appwrite";
+    import { browser } from "$app/environment";
 
     export let isLoggedIn = false;
     let teacher = false;
@@ -30,7 +31,8 @@
         });
     }
 
-    sesh();
+
+    if(browser) sesh()
 
     function logout(){
         appwriteUser.deleteSession('current').then((res) => {

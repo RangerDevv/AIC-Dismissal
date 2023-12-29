@@ -3,6 +3,7 @@
     import { appwriteDatabases,appwriteClient } from "$lib/appwrite";
     import { DB_ID,COLLECTION } from "$lib/ids";
     import { onMount } from "svelte";
+    import { browser } from "$app/environment";
 
     export let data:slug;
 
@@ -24,7 +25,7 @@
 
     
         
-    const unsubscribe = appwriteClient.subscribe('databases.'+DB_ID+'.collections.'+COLLECTION.Parents+'.documents', res => {
+    const unsubscribe = browser ? appwriteClient.subscribe('databases.'+DB_ID+'.collections.'+COLLECTION.Parents+'.documents', res => {
         // console.log('update');
         // console.log(res);
         console.log(classStudents);
@@ -32,11 +33,11 @@
         classStudents.find((child) => child.parents.$id == payload.$id).parents.Arrived = payload.Arrived;
         // refresh the array
         classStudents = [...classStudents];
-    });
+    }) : undefined;
 
     onMount(() => {
         return () => {
-            unsubscribe();
+            unsubscribe!();
         };
     });
 
