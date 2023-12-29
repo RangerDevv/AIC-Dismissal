@@ -13,9 +13,8 @@
     let newChildName = '';
     let newChildClass = '';
 
-    // 40.36811998939977, -80.17784797235736
-    let mosqueLat = 40.36811998939977;
-    let mosqueLng = -80.17784797235736;
+    let mosqueLat = 40.40920469987484;
+    let mosqueLng = -80.083139337501;
     let distanceFromMosque = 0;
 
     let isNearMosque = null as boolean | null;
@@ -77,8 +76,7 @@
         const lng = position.coords.longitude;
 
         // Update the map with the user's new location
-        console.log(`Latitude: ${lat}, longitude: ${lng}`);
-        console.log('Before'+ isNearMosque)
+        // console.log(`Latitude: ${lat}, longitude: ${lng}`);
 
         // if the user is within 100 meters of the mosque then send the notification
         let R = 6371e3; // Earth's radius in meters
@@ -96,9 +94,7 @@
 
         distanceFromMosque = distance;
 
-        isNearMosque = distance < 100;
-
-        console.log('After'+ isNearMosque)
+        isNearMosque = distance < 100 ? true : false;
         },
         // Error callback function
         function(error) {
