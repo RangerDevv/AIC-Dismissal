@@ -4,28 +4,57 @@
     let email = "";
     let name = "";
     let password = "";
+    let confirmPassword = "";
     let date = "";
 
+    $: disabled = !email || !password || !name || !date || !confirmPassword;
+
     function registerUser() {
+        if(password != confirmPassword) return alert('Passwords do not match');
         register(email, password,name,date);
     }
 
 </script>
 
-<div class="container">
+    <h1 class="text-xl text-center pt-5 text-white font-bold">Register</h1>
 
-    <h1>Register</h1>
-
-    <form on:submit|preventDefault={registerUser}>
-        <label for="email">Email</label>
-        <input type="email" id="email" bind:value={email} />
-        <label for="name">Name</label>
-        <input type="text" id="name" bind:value={name} />
-        <label for="password">Password</label>
-        <input type="password" id="password" bind:value={password} />
-        <label for="date">Date of Birth</label>
-        <input type="date" id="date" bind:value={date} />
-        <button class="btn btn-success" type="submit">Register</button>
+    <form on:submit|preventDefault={registerUser} class="flex flex-col justify-center items-center">
+        <div class="w-80 mt-[10vh]">
+            <label class="form-control w-full max-w-xs">
+                <div class="label">
+                <span class="label-text">Email</span>
+                </div>
+                <input type="email" placeholder="Type here" class="input input-bordered w-full max-w-xs" bind:value={email} />
+            </label>
+            <label class="form-control w-full max-w-xs">
+                <div class="label">
+                <span class="label-text">Name</span>
+                </div>
+                <input type="text" placeholder="Type here" class="input input-bordered w-full max-w-xs" bind:value={name} />
+            </label>
+            <label class="form-control w-full max-w-xs">
+                <div class="label">
+                <span class="label-text">Date Of Birth</span>
+                </div>
+                <input type="date" placeholder="Type here" class="input input-bordered w-full max-w-xs" bind:value={date} />
+            </label>
+            <!-- <label for="password">Password</label>
+            <input type="password" id="password" bind:value={password} /> -->
+            <label class="form-control w-full max-w-xs">
+                <div class="label">
+                <span class="label-text">Password</span>
+                </div>
+                <input type="password" placeholder="Type here" class="input input-bordered w-full max-w-xs" bind:value={password} />
+            </label>
+            <label class="form-control w-full max-w-xs">
+                <div class="label">
+                <span class="label-text">Confirm Password</span>
+                </div>
+                <input type="password" placeholder="Type here" class="input input-bordered w-full max-w-xs" bind:value={confirmPassword} />
+            </label>
+            <button class="btn btn-success mt-3 w-full" disabled={disabled} type="submit">Register</button>
+            <div class="label">
+                <span class="label-text">Already have an account? <a class="underline" href="/loginRegister/login">Login</a></span>
+            </div>
+        </div>
     </form>
-
-</div>

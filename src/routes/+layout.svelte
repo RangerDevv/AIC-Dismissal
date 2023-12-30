@@ -13,6 +13,7 @@
         appwriteUser.getSession('current').then((res) => {
         appwriteUser.get().then((res) => {
             // console.log(res);
+            isLoggedIn = true;
                 appwriteDatabases.listDocuments(DB_ID,COLLECTION.Parents,[Query.equal('uid',[res['$id']])]).then((res:any) => {
                     teacher = res['documents'][0]['isTeacher'];
                 }).catch((err) => {
@@ -61,7 +62,7 @@
             {#if isLoggedIn}
             <a href="/dashboard/parentDash"><button class="btn btn-primary">Home</button></a>
             {#if teacher}
-            <a href="/dashboard/teacherDash/"><button class="btn">Go to Classroom</button></a>
+            <a href="/dashboard/teacherDash/"><button class="btn">All Classroom</button></a>
             {/if}
             <button class="btn btn-primary" on:click={logout}>Logout</button>
             {/if}
