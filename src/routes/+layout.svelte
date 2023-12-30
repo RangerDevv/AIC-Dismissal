@@ -61,7 +61,7 @@
             <a href="/loginRegister/login"><button class="btn">Login</button></a>
             {/if}
             {#if isLoggedIn}
-            <a href="/dashboard/parentDash"><button class="btn btn-primary">Home</button></a>
+            <a href="/dashboard/parentDash"><button class="btn">Home</button></a>
             {#if teacher}
             <a href="/dashboard/teacherDash/"><button class="btn">All Classroom</button></a>
             {/if}
