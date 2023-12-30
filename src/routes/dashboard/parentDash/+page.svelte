@@ -9,6 +9,7 @@
     let parentDBID = '';
     let children = [] as any[];
     let arrivedBool = false;
+    let loading = true;
 
     let newChildName = '';
     let newChildClass = '';
@@ -19,9 +20,6 @@
 
     let isNearMosque = null as boolean | null;
     let isLocationAccessGranted = false;
-
-
-    let my_modal_6 = document.getElementById('my_modal_6') as HTMLInputElement;
 
     async function addChild() {
         console.log(newChildName);
@@ -36,8 +34,6 @@
         ).then((res) => {
             // console.log(res);
             getChildren();
-            // uncheck the modal
-            my_modal_6.checked = false;
             newChildClass = '';
             newChildName = '';
         }).catch((err) => {
@@ -46,6 +42,7 @@
     }
 
     async function getChildren() {
+        loading = true;
         appwriteUser.get().then((res) => {
             uuid = res['$id'];
             console.log('UUID '+uuid);
@@ -54,6 +51,10 @@
                 parentDBID = res.documents[0]['$id'];
                 children = res.documents[0]['students'];
                 console.log(children);
+                loading = false;
+                if(children.length == 0) {
+                    loading = false;
+                }
         }).catch((err) => {
             // console.log(err);
         });
@@ -135,15 +136,21 @@
         };
     });
 
-
 </script>
 
 <main>
 <h1 class="text-3xl font-bold text-center pt-5">Parent Dashboard</h1>
 <div>
-    <label for="my_modal_6" class="btn btn-ghost outline m-6">Add Child</label>
+    {#if loading}
+    <div class="flex flex-col justify-center items-center">
+        <span class="loading loading-spinner loading-lg mt-5"></span>
+    </div>
+    {:else}
     {#if children.length == 0}
-    <h1 class="text-3xl font-bold text-center pt-5">You have no children</h1>
+    <div class="flex flex-col justify-center items-center">
+        <h1 class="text-xl font-bold text-center pt-5">You have no children</h1>
+        <label for="my_modal_6" class="btn btn-ghost outline m-3 w-96">Add Child</label>
+    </div>
     {:else}
     <h1 class="text-3xl font-bold text-center pt-5 mb-4">Your Children</h1>
 
@@ -204,11 +211,15 @@
         </div>
     </div>
     {/each}
+    <div class="flex flex-col justify-center items-center">
+        <!-- <h1 class="text-xl font-bold text-center pt-5">You have no children</h1> -->
+        <label for="my_modal_6" class="btn btn-ghost outline m-3 w-72 sm:w-96">Add Child</label>
+    </div>
     {/if}
 
-    <h1 class="text-3xl font-bold text-center pt-5 mb-4">Children Status</h1>
+    <h1 class="text-3xl font-bold text-center pt-5 mb-2">Children Status</h1>
     {#if children.length == 0}
-    <h1 class="text-3xl font-bold text-center pt-5">You have no children</h1>
+    <h1 class="text-xl font-bold text-center pt-3">You have no children</h1>
     {:else}
     {#each children as child}
         {#if child.Sent}
@@ -224,6 +235,7 @@
         {/if}
     {/each}
     {/if}
+    {/if}
 </div>
 </main>
 <input type="checkbox" id="my_modal_6" class="modal-toggle" />
@@ -235,8 +247,19 @@
         <option value="658c81599273893f19ea">Youth</option>
     </select>
     <div class="modal-action">
-        <button class="btn btn-primary" on:click={addChild}>Add Child</button>
+        <label for="my_modal_6" class="btn btn-success" on:click={addChild}>Add Child</label>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
         <label for="my_modal_6" class="btn btn-error">Close</label>
     </div>
   </div>
 </div>
+
+<style>
+    .modal-box *{
+        transition: all .3s ease;
+    }
+
+    #alert{
+        display: hidden;
+    }
+</style>
