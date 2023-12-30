@@ -13,8 +13,8 @@
 
     async function forgotPassword() {
         if(!email) return alert('Please enter your email');
+        alert('Please contact the school to reset your password');
         await appwriteUser.createRecovery(email , 'https://aicdismissal.vercel.app/')
-        alert('Please check your email for a reset link');
     }
 </script>
 
