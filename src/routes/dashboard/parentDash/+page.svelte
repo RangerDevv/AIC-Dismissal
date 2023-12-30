@@ -3,7 +3,7 @@
     import { appwriteDatabases,appwriteUser,appwriteClient } from "$lib/appwrite";
     import { DB_ID,COLLECTION } from "$lib/ids";
     import { Query,ID } from "appwrite";
-    import { onDestroy, onMount } from "svelte";
+    import { onMount } from "svelte";
 
     let uuid = '';
     let parentDBID = '';
@@ -20,6 +20,17 @@
 
     let isNearMosque = null as boolean | null;
     let isLocationAccessGranted = false;
+
+    let classList = [] as any[];
+
+    async function listClasses() {
+        await appwriteDatabases.listDocuments(DB_ID,COLLECTION.Class).then((res) => {
+            console.log(res);
+            classList = res['documents'] as any[];
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
 
     async function addChild() {
         console.log(newChildName);
@@ -64,6 +75,7 @@
     }
 
     onMount(async () =>{ 
+        listClasses();
         getChildren();
             // Check if geolocation is supported by the browser
     if ("geolocation" in navigator) {
@@ -111,12 +123,15 @@
     });
 
     async function isArrived(e:any) {
+        const close = document.getElementById('notify') as HTMLInputElement;
+        close.click();
         await appwriteDatabases.updateDocument(DB_ID,COLLECTION.Parents,parentDBID,
             {
                 Arrived:e.target.checked
             }
         ).then((res) => {
             // console.log(res);
+            // simulate the click of the close button of the notify modal
         }).catch((err) => {
             console.log(err);
         });
@@ -129,6 +144,7 @@
         // refresh the array
         children = [...children];
     }) : undefined;
+
 
     onMount(() => {
         return () => {
@@ -162,7 +178,7 @@
                 </div>
                 <div class="flex flex-row gap-3 pr-4">
                     <!-- <button class="btn btn-success">Arrived</button> -->
-                    <p class="font-bold">Arrived</p>
+                    <p class="font-bold">Status</p>
                 </div>
             </div>
         </div>
@@ -174,7 +190,7 @@
             <div class="flex flex-row pb-3">
                 <div class="flex-1 pl-5">
                     <h1 class="text-2xl pt-5">{child.Name}</h1>
-                    <h2 class="text-sm">{child.class.Name}</h2>
+                    <h2 class="text-sm">Class: {child.class.Name}</h2>
                 </div>
                 <div class="flex flex-row gap-10 pr-4">
                     {#if isLocationAccessGranted}
@@ -195,7 +211,10 @@
                     <div class="modal-box">
                         <h1 class="text-3xl font-bold text-center pt-5">Are you sure you want to notify the mosque?</h1>
                         <div class="flex flex-row justify-center items-center">
-                            <input type="checkbox" bind:checked={arrivedBool} id="{child.Name}" name="{child.Name}" value="{child.$id}"  class='checkbox checkbox-success checkbox-lg mt-10 rounded-full' on:change={isArrived}>
+                            <label class="flex flex-col gap-2 cursor-pointer items-center">
+                            <span class="label-text mt-5 text-lg">Yes</span> 
+                            <input type="checkbox" bind:checked={arrivedBool} id="{child.Name}" name="{child.Name}" value="{child.$id}"  class='checkbox checkbox-success checkbox-lg rounded-full' on:change={isArrived}>
+                            </label>
                         </div>
                         <div class="modal-action">
                             <label for="notify" class="btn btn-error">Close</label>
@@ -243,8 +262,10 @@
   <div class="modal-box">
     <input type="text" placeholder="Child Name" bind:value={newChildName} class="input input-bordered"/>
     <select class="select select-bordered" bind:value={newChildClass}>
-        <option value="658c813d020c227f7ae2">Fatima-1</option>
-        <option value="658c81599273893f19ea">Youth</option>
+        <option value="">Select Class</option>
+        {#each classList as allClass}
+        <option value="{allClass.$id}">{allClass.Name}</option>
+        {/each}
     </select>
     <div class="modal-action">
         <label for="my_modal_6" class="btn btn-success" on:click={addChild}>Add Child</label>
