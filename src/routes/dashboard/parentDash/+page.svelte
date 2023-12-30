@@ -74,6 +74,29 @@
         });
     }
 
+    async function updateChildren() {
+        await appwriteDatabases.updateDocument(DB_ID,COLLECTION.Parents,parentDBID,
+            {
+                students:[...children]
+            }
+        ).then((res) => {
+            // console.log(res);
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+
+    async function deleteChildren(e:any) {
+        const close = document.getElementById('childEditList') as HTMLInputElement;
+        close.click();
+        await appwriteDatabases.deleteDocument(DB_ID,COLLECTION.Students,e).then((res) => {
+            // console.log(res);
+            getChildren();
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+
     onMount(async () =>{ 
         listClasses();
         getChildren();
@@ -199,18 +222,18 @@
                     <input type="checkbox" bind:checked={arrivedBool} id="{child.Name}" name="{child.Name}" value="{child.$id}"  class='checkbox checkbox-success rounded-full' on:change={isArrived}>
                     {:else}
                     <div class="flex flex-col just-end items-end">
-                    <p class="">You are not close to the mosque yet!</p>
                     {#if arrivedBool}
                     <label for="notify" class="btn btn-ghost outline outline-green-600 text-green-600 m-6" id="warning">Notified</label>
                     {:else}
-                    <label for="notify" class="btn btn-ghost outline outline-rose-600 text-rose-600 m-6" id="warning">Notify Anyway</label>
+                    <label for="notify" class="btn btn-ghost outline outline-rose-600 text-rose-600 m-2" id="warning">Notify Anyway</label>
                     {/if}
+                    <p class="w-36 text-sm">Notify when close to the mosque.</p>
                     </div>
                     <input type="checkbox" id="notify" class="modal-toggle" />
                     <div class="modal" role="dialog">
                     <div class="modal-box">
                         <h1 class="text-3xl font-bold text-center pt-5">Are you sure you want to notify the mosque?</h1>
-                        <div class="flex flex-row justify-center items-center">
+                        <div class="flex flex-col justify-center items-center">
                             <label class="flex flex-col gap-2 cursor-pointer items-center">
                             <span class="label-text mt-5 text-lg">Yes</span> 
                             <input type="checkbox" bind:checked={arrivedBool} id="{child.Name}" name="{child.Name}" value="{child.$id}"  class='checkbox checkbox-success checkbox-lg rounded-full' on:change={isArrived}>
@@ -233,6 +256,9 @@
     <div class="flex flex-col justify-center items-center">
         <!-- <h1 class="text-xl font-bold text-center pt-5">You have no children</h1> -->
         <label for="my_modal_6" class="btn btn-ghost outline m-3 w-72 sm:w-96">Add Child</label>
+        {#if children.length > 0}
+        <label for="childEditList" class="btn btn-ghost outline m-3 w-72 sm:w-96">Edit Child List</label>
+        {/if}
     </div>
     {/if}
 
@@ -255,6 +281,10 @@
     {/each}
     {/if}
     {/if}
+    <div class="flex flex-col justify-center items-center">
+        <!-- <h1 class="text-xl font-bold text-center pt-5">You have no children</h1> -->
+
+    </div>
 </div>
 </main>
 <input type="checkbox" id="my_modal_6" class="modal-toggle" />
@@ -271,6 +301,24 @@
         <label for="my_modal_6" class="btn btn-success" on:click={addChild}>Add Child</label>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <label for="my_modal_6" class="btn btn-error">Close</label>
+    </div>
+  </div>
+</div>
+
+<input type="checkbox" id="childEditList" class="modal-toggle" />
+<div class="modal" role="dialog">
+  <div class="modal-box">
+    <div class="flex flex-col gap-3 w-full">
+        {#each children as child}
+        <div class="flex flex-row gap-4">
+            <input type="text" placeholder="Child Name" bind:value={child.Name} class="input input-bordered w-full"/>
+            <!-- delete button -->
+            <button class="btn btn-error" on:click={() => deleteChildren(child.$id)}>Delete</button>
+        </div>
+        {/each}
+    </div>
+    <div class="modal-action">
+        <label for="childEditList" class="btn btn-success" on:click={updateChildren}>Update</label>
     </div>
   </div>
 </div>
