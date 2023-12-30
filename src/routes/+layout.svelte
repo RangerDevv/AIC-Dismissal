@@ -16,6 +16,7 @@
             isLoggedIn = true;
                 appwriteDatabases.listDocuments(DB_ID,COLLECTION.Parents,[Query.equal('uid',[res['$id']])]).then((res:any) => {
                     teacher = res['documents'][0]['isTeacher'];
+                    isLoggedIn = true;
                 }).catch((err) => {
                     console.log(err);
                 });
