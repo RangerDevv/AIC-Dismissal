@@ -37,11 +37,16 @@
 
     if(browser) sesh()
 
+    setInterval(() => {
+        if(browser) sesh()
+    }, 1000);
+
     function logout(){
         appwriteUser.deleteSession('current').then((res) => {
         console.log(res);
         isLoggedIn = false;
         return res;
+        goto('/')
         }).catch((err) => {
         console.log(err);
         isLoggedIn = false;
