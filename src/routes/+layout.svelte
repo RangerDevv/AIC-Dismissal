@@ -11,6 +11,7 @@
 
     async function sesh(){ 
         appwriteUser.getSession('current').then((res) => {
+            isLoggedIn = true;
         appwriteUser.get().then((res) => {
             // console.log(res);
             isLoggedIn = true;
