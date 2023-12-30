@@ -160,6 +160,19 @@
         });
     }
 
+    async function isReceived(e:any) {
+        await appwriteDatabases.updateDocument(DB_ID,COLLECTION.Students,e.target.value,
+            {
+                Received:e.target.checked
+            }
+        ).then((res) => {
+            console.log(res);
+            // simulate the click of the close button of the notify modal
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+
     const unsubscribe = browser ? appwriteClient.subscribe('databases.'+DB_ID+'.collections.'+COLLECTION.Students+'.documents', res => {
         // find the child using $id that was updated and update it in the array
         const payload = res.payload as any;
@@ -267,15 +280,26 @@
     <h1 class="text-xl font-bold text-center pt-3">You have no children</h1>
     {:else}
     {#each children as child}
+    <div id="lebels" class="flex flex-row gap-2 mx-auto pb-2 justify-between pl-10 items-center">
+        <p class="font-bold">Status</p>
+        <p class="font-bold mr-4">Received</p>
+    </div>
         {#if child.Sent}
         <div class="flex flex-row gap-2 mx-auto pb-2 justify-start pl-10 items-center">
+            <div class="flex-1 flex gap-2 flex-row">
             <input type="checkbox" class="checkbox checkbox-success rounded-full disabled:opacity-100 disabled:bg-red-700" checked={child.Sent} disabled>
             <p>{child.Name} has been sent</p>
+            </div>
+            <!-- received button -->
+            <input type="checkbox" bind:checked={child.isReceived} id="{child.$id}" name="{child.Name}" value="{child.$id}" class='checkbox checkbox-info rounded-full mr-8' on:change={isReceived}>
         </div>
         {:else}
         <div class="flex flex-row gap-2 mx-auto pb-2 justify-start pl-10 items-center">
+            <div class="flex-1 flex gap-2 flex-row">
             <input type="checkbox" class="checkbox checkbox-success rounded-full disabled:opacity-100 disabled:bg-red-700" checked={child.Sent} disabled>
             <p>{child.Name} has not been sent yet please be patient</p>
+            </div>
+            <input type="checkbox" bind:checked={child.isReceived} id="{child.$id}" name="{child.Name}" value="{child.$id}" class='checkbox checkbox-info rounded-full mr-8' on:change={isReceived} disabled>
         </div>
         {/if}
     {/each}

@@ -28,14 +28,20 @@
 
     
         
-    const unsubscribe = browser ? appwriteClient.subscribe('databases.'+DB_ID+'.collections.'+COLLECTION.Parents+'.documents', res => {
+    const unsubscribe = browser ? appwriteClient.subscribe(['databases.'+DB_ID+'.collections.'+COLLECTION.Parents+'.documents','databases.'+DB_ID+'.collections.'+COLLECTION.Students+'.documents'], res => {
         // console.log('update');
-        // console.log(res);
-        console.log(classStudents);
+        console.log(res);
         const payload = res.payload as any;
-        classStudents.find((child) => child.parents.$id == payload.$id).parents.Arrived = payload.Arrived;
-        // refresh the array
+        if (payload.Arrived !== undefined) {
+            classStudents.find((child) => child.parents.$id == payload.$id).parents.Arrived = payload.Arrived;
+        }
+        // classStudents.find((child) => child.parents.$id == payload.$id).parents.Arrived = payload.Arrived;
+        // if the term recieved exists in the payload then update the recieved value in the classStudents array
+        if(payload.Received !== undefined) {
+            classStudents.find((child) => child.$id == payload.$id).Received = payload.Received;
+        }
         classStudents = [...classStudents];
+        console.log(classStudents);
     }) : undefined;
 
     onMount(() => {
@@ -77,6 +83,7 @@
             <div class="flex flex-row pb-2">
                 <div class="flex-1 pl-2 flex flex-row gap-3">
                     <h1 class="font-bold">Arrived</h1>
+                    <h1 class="font-bold">Received</h1>
                     <h1 class="font-bold">Name</h1>
                 </div>
                 <div class="flex flex-row gap-3 pr-4">
@@ -91,14 +98,15 @@
         <div class="flex flex-row pl-5 pr-5 pt-2">
             <div class="flex-1 flex flex-row gap-4">
                 <input type="checkbox" class="checkbox checkbox-success rounded-full disabled:opacity-100 disabled:bg-transparent outline" checked={student.parents.Arrived} disabled>
-                <div class="flex flex-col gap-1 pl-4">
+                <input type="checkbox" class="checkbox checkbox-info rounded-full disabled:opacity-100 disabled:bg-transparent outline ml-8" checked={student.Received} disabled>
+                <div class="flex flex-col gap-1 pl-6">
                 <h2 class="text-xl">{student.Name}</h2>
                 <!-- get the parents[0] Name array inside the students array -->
                 <h3 class="text-sm">Parent: {student.parents.Name}</h3>
                 </div>
             </div>
             <div>
-                <input type="checkbox" id="{student.Name}" name="{student.Name}" value="{student.$id}" checked={student.Sent} class='checkbox checkbox-warning rounded-full' on:change={isSent}>
+                <input type="checkbox" id="{student.Name}" name="{student.Name}" value="{student.$id}" checked={student.Sent} class='checkbox checkbox-warning' on:change={isSent}>
             </div>
         </div>
         <div class="w-full h-0.5 bg-slate-500 opacity-25"></div> 
