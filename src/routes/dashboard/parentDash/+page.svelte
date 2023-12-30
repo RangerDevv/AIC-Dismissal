@@ -343,6 +343,7 @@
     </div>
     <div class="modal-action">
         <label for="childEditList" class="btn btn-success" on:click={updateChildren}>Update</label>
+        <label for="childEditList" class="btn btn-error">Close</label>
     </div>
   </div>
 </div>
