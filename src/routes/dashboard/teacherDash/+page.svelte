@@ -5,9 +5,62 @@
 
     let classList = [] as any[];
 
+    let todayDate = new Date().toISOString().slice(0,10);
+    // console.log(todayDate);
+
+    async function getLastDate() {
+        await appwriteDatabases.getDocument(DB_ID,COLLECTION.DayToReset,'65911e4d495a785807e7').then((res) => {
+            // console.log(res);
+            if (res['Day'].slice(0,10) !== todayDate) {
+                resetAll();
+            }
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+
+    async function resetAll() {
+        appwriteDatabases.listDocuments(DB_ID,COLLECTION.Students).then((res) => {
+            // console.log(res);
+            res['documents'].forEach((student) => {
+                appwriteDatabases.updateDocument(DB_ID,COLLECTION.Students,student['$id'],{
+                    Received:false,
+                    Sent:false
+                }).then((res) => {
+                    // console.log(res);
+                }).catch((err) => {
+                    console.log(err);
+                });
+            });
+            appwriteDatabases.listDocuments(DB_ID,COLLECTION.Parents).then((res) => {
+                // console.log(res);
+                res['documents'].forEach((parent) => {
+                    appwriteDatabases.updateDocument(DB_ID,COLLECTION.Parents,parent['$id'],{
+                        Arrived:false
+                    }).then((res) => {
+                        // console.log(res);
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                });
+            }).catch((err) => {
+                console.log(err);
+            });
+            appwriteDatabases.updateDocument(DB_ID,COLLECTION.DayToReset,'65911e4d495a785807e7',{
+                Day:todayDate
+            }).then((res) => {
+                // console.log(res);
+            }).catch((err) => {
+                console.log(err);
+            });
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+
     async function listClasses() {
         await appwriteDatabases.listDocuments(DB_ID,COLLECTION.Class).then((res) => {
-            console.log(res);
+            // console.log(res);
             classList = res['documents'];
         }).catch((err) => {
             console.log(err);
@@ -16,6 +69,7 @@
 
     onMount(() => {
         listClasses();
+        getLastDate();
     });
 </script>
 
