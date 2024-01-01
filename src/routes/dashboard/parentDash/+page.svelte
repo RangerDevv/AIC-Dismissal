@@ -16,7 +16,7 @@
 
     let mosqueLat = 40.40920469987484;
     let mosqueLng = -80.083139337501;
-    let distanceFromMosque = 0;
+    let locationLoading = true;
 
     let isNearMosque = null as boolean | null;
     let isLocationAccessGranted = false;
@@ -128,9 +128,8 @@
 
         let distance = R * c; // Distance in meters
 
-        distanceFromMosque = distance;
-
         isNearMosque = distance < 100 ? true : false;
+        locationLoading = false;
         },
         // Error callback function
         function(error) {
@@ -229,6 +228,9 @@
                     <h2 class="text-sm">Class: {child.class.Name}</h2>
                 </div>
                 <div class="flex flex-row gap-10 pr-4">
+                    {#if locationLoading}
+                    <span class="loading loading-spinner loading-lg mt-5"></span>
+                    {:else}
                     {#if isLocationAccessGranted}
                     {#if isNearMosque}
                     <!-- <button class="btn btn-success">Arrived</button> -->
@@ -260,6 +262,7 @@
                     {/if}
                     {:else}
                     <label for="notify" class="btn btn-ghost outline outline-rose-600 text-rose-600 m-6" id="warning">Please Grant Location Access</label>
+                    {/if}
                     {/if}
                 </div>
             </div>
