@@ -232,7 +232,7 @@
                     <span class="loading loading-spinner loading-lg mt-5"></span>
                     {:else}
                     {#if isLocationAccessGranted}
-                    {#if isNearMosque}
+                    {#if !isNearMosque}
                     <!-- <button class="btn btn-success">Arrived</button> -->
                                                 <input type="checkbox" bind:checked={arrivedBool} id="{child.Name}" name="{child.Name}" value="{child.$id}"  class='checkbox checkbox-success checkbox-md rounded-full' on:change={isArrived}>
                     {:else}
