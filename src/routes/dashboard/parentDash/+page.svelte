@@ -296,7 +296,7 @@ if(close){
             <p>{child.Name} has been sent</p>
             </div>
             <!-- received button -->
-            <input type="checkbox" bind:checked={child.isReceived} id="{child.$id}" name="{child.Name}" value="{child.$id}" class='checkbox checkbox-info rounded-full mr-8' on:change={isReceived}>
+            <input type="checkbox" bind:checked={child.Received} id="{child.$id}" name="{child.Name}" value="{child.$id}" class='checkbox checkbox-info rounded-full mr-8' on:change={isReceived}>
         </div>
         {:else}
         <div class="flex flex-row gap-2 mx-auto pb-2 justify-start pl-10 items-center">
@@ -304,7 +304,7 @@ if(close){
             <input type="checkbox" class="checkbox checkbox-success rounded-full disabled:opacity-100 disabled:bg-red-700" checked={child.Sent} disabled>
             <p>{child.Name} has not been sent yet please be patient</p>
             </div>
-            <input type="checkbox" bind:checked={child.isReceived} id="{child.$id}" name="{child.Name}" value="{child.$id}" class='checkbox checkbox-info rounded-full mr-8' on:change={isReceived} disabled>
+            <input type="checkbox" bind:checked={child.Received} id="{child.$id}" name="{child.Name}" value="{child.$id}" class='checkbox checkbox-info rounded-full mr-8' on:change={isReceived} disabled>
         </div>
         {/if}
     {/each}
