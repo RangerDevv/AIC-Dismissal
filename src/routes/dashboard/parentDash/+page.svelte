@@ -146,7 +146,9 @@
 
     async function isArrived(e:any) {
         const close = document.getElementById('notify') as HTMLInputElement;
+if(clone){
         close.click();
+}
         await appwriteDatabases.updateDocument(DB_ID,COLLECTION.Parents,parentDBID,
             {
                 Arrived:e.target.checked
