@@ -44,7 +44,7 @@
                 <div class="label">
                 <span class="label-text">Password</span>
                 </div>
-                <input type="password" placeholder="Type here" class="input input-bordered w-full max-w-xs" bind:value={password} />
+                <input type="password" placeholder="Password (Must be 8 characters long)" class="input input-bordered w-full max-w-xs" bind:value={password} />
             </label>
             <label class="form-control w-full max-w-xs">
                 <div class="label">

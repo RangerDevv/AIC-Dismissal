@@ -53,7 +53,6 @@
     }
 
     async function getChildren() {
-        loading = true;
         appwriteUser.get().then((res) => {
             uuid = res['$id'];
             console.log('UUID '+uuid);
@@ -136,6 +135,7 @@
         // Handle errors, e.g. user denied location sharing permissions
         console.error("Error getting user location:", error);
         isLocationAccessGranted = false;
+        locationLoading = false;
         }
     );
     } else {
