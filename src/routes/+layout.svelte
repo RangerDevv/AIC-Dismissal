@@ -9,12 +9,15 @@
     export let isLoggedIn = false;
     let teacher = false;
 
+    let uid = '';
+
     async function sesh(){ 
         appwriteUser.getSession('current').then((res) => {
             isLoggedIn = true;
         appwriteUser.get().then((res) => {
             // console.log(res);
             isLoggedIn = true;
+            uid = res['$id'];
                 appwriteDatabases.listDocuments(DB_ID,COLLECTION.Parents,[Query.equal('uid',[res['$id']])]).then((res:any) => {
                     teacher = res['documents'][0]['isTeacher'];
                     isLoggedIn = true;
@@ -72,19 +75,21 @@
             <a href="/dashboard/parentDash"><button class="btn">Home</button></a>
             {#if teacher}
             <a href="/dashboard/teacherDash/"><button class="btn">All Classroom</button></a>
+            {#if uid == '659b001f1dd2ea90b3ed' || uid == '658c6e971bcb4f11e387'}
             <ul class="menu menu-horizontal px-1">
             <li>
                 <details>
                   <summary class="hover:bg-slate-900 btn text-base">
-                    Parent
+                    Admin
                   </summary>
                   <ul class="p-2 rounded-t-none bg-slate-800">
                     <li><a href="/allUsers">Users</a></li>
-                    <li><a>Logs</a></li>
+                    <!-- <li><a>Logs</a></li> -->
                   </ul>
                 </details>
             </li>
             </ul>
+            {/if}
             {/if}
             <button class="btn btn-primary" on:click={logout}>Logout</button>
             {/if}
