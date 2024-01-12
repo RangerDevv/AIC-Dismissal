@@ -62,6 +62,7 @@
         await appwriteDatabases.listDocuments(DB_ID,COLLECTION.Class).then((res) => {
             // console.log(res);
             classList = res['documents'];
+            console.log(classList);
         }).catch((err) => {
             console.log(err);
         });
@@ -88,8 +89,23 @@
                     <h1 class="text-xl font-bold">{allClass.Name}</h1>
                     <h1 class="text-sm">Teacher: {allClass.Teacher}</h1>
                     </div>
+                    {#if allClass.students.length>0}
+                    <div class="stack">
+                    {#each allClass.students as student}
+                    {#if student.parents.Arrived && !student.Sent && student.length !== 0}
+                    <div class="indicator">
+                        <span class="indicator-item badge badge-secondary">!</span>
+                        <a href="/dashboard/teacherDash/{allClass.$id}/"><button class="btn btn-primary">View</button></a>
+                      </div>
+                    {:else}
                     <a href="/dashboard/teacherDash/{allClass.$id}/"><button class="btn btn-primary">View</button></a>
-                </div>
+                    {/if}
+                    {/each}
+                    </div>
+                    {:else}
+                    <a href="/dashboard/teacherDash/{allClass.$id}/"><button class="btn btn-primary">View</button></a>
+                    {/if}
+                    </div>
                 {/each}
             {/if}
         </div>

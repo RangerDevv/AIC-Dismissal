@@ -72,6 +72,19 @@
             <a href="/dashboard/parentDash"><button class="btn">Home</button></a>
             {#if teacher}
             <a href="/dashboard/teacherDash/"><button class="btn">All Classroom</button></a>
+            <ul class="menu menu-horizontal px-1">
+            <li>
+                <details>
+                  <summary class="hover:bg-slate-900 btn text-base">
+                    Parent
+                  </summary>
+                  <ul class="p-2 rounded-t-none bg-slate-800">
+                    <li><a href="/allUsers">Users</a></li>
+                    <li><a>Logs</a></li>
+                  </ul>
+                </details>
+            </li>
+            </ul>
             {/if}
             <button class="btn btn-primary" on:click={logout}>Logout</button>
             {/if}
