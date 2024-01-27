@@ -277,14 +277,14 @@ if(close){
                     <h2 class="text-sm">Class: {child.class.Name}</h2>
                 </div>
                 <div class="flex flex-row gap-10 pr-4">
-                    {#if locationLoading}
+                    <!-- {#if locationLoading}
                     <span class="loading loading-spinner loading-lg mt-5"></span>
                     {:else}
                     {#if isLocationAccessGranted}
-                    {#if isNearMosque}
+                    {#if isNearMosque} -->
                     <!-- <button class="btn btn-success">Arrived</button> -->
                         <input type="checkbox" bind:checked={arrivedBool} id="{child.Name}" name="{child.Name}" value="{child.$id}"  class='checkbox checkbox-success checkbox-md rounded-full' on:change={isArrived}>
-                    {:else}
+                    <!-- {:else}
                     <div class="flex flex-col just-end items-end">
                     {#if arrivedBool}
                     <label for="notify" class="btn btn-ghost outline outline-green-600 text-green-600 m-6" id="warning">Notified</label>
@@ -312,7 +312,7 @@ if(close){
                     {:else}
                     <label for="notify" class="btn btn-ghost outline outline-rose-600 text-rose-600 m-6" id="warning">Please Grant Location Access</label>
                     {/if}
-                    {/if}
+                    {/if} -->
                 </div>
             </div>
         </div>
