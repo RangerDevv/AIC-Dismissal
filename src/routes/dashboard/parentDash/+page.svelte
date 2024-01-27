@@ -111,6 +111,23 @@
 
         // Update the map with the user's new location
         // console.log(`Latitude: ${lat}, longitude: ${lng}`);
+        
+        // check if the user is within 100 meters of the mosque
+        let R = 6371e3; // Earth's radius in meters
+        let φ1 = lat * Math.PI/180; // Convert latitude from degrees to radians
+        let φ2 = mosqueLat * Math.PI/180; // Convert mosque latitude from degrees to radians
+        let Δφ = (mosqueLat-lat) * Math.PI/180; // Difference of latitudes
+        let Δλ = (mosqueLng-lng) * Math.PI/180; // Difference of longitudes
+
+        let a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+            Math.cos(φ1) * Math.cos(φ2) *
+            Math.sin(Δλ/2) * Math.sin(Δλ/2);
+        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        let distance = R * c; // Distance in meters
+
+        isNearMosque = distance < 100 ? true : false;
+        locationLoading = false;
     }
 
     // Call the getCurrentPosition method with the defined locationSuccess function
