@@ -100,30 +100,30 @@
         listClasses();
         getChildren();
         // Callback function automatically called when location services initialized in iOS app
-function median_geolocation_ready() {
-// Define the locationSuccess function
-function locationSuccess(position:any) {
-    // Handle the success callback logic here
-}
+    function median_geolocation_ready() {
+    // Define the locationSuccess function
+    function locationSuccess(position:any) {
+        // Handle the success callback logic here
+    }
 
-// Call the getCurrentPosition method with the defined locationSuccess function
-function locationError(error:any) {
-    console.log(error);
-}
+    // Call the getCurrentPosition method with the defined locationSuccess function
+    function locationError(error:any) {
+        console.log(error);
+    }
 
-const locationOptions = {}; // Declare locationOptions variable
-navigator.geolocation.getCurrentPosition(locationSuccess, locationError, {enableHighAccuracy: true}); // Call the getCurrentPosition method with the defined locationSuccess function
-}
+    const locationOptions = {}; // Declare locationOptions variable
+    navigator.geolocation.getCurrentPosition(locationSuccess, locationError, {enableHighAccuracy: true}); // Call the getCurrentPosition method with the defined locationSuccess function
+    }
         
 // Use callback function as a helper function and call immediately if not in iOS app
-if (!navigator.userAgent.includes('MedianIOS')) {
+// console.log(navigator.userAgent);
+if (navigator.userAgent.includes('MedianIOS')) {
   median_geolocation_ready();
 } else {
     // Check if geolocation is supported by the browser
     if ("geolocation" in navigator) {
     // Prompt user for permission to access their location
     isLocationAccessGranted = true;
-    locationLoading = false;
     navigator.geolocation.watchPosition(
         // Success callback function
         function(position) {
@@ -258,7 +258,7 @@ if(close){
                     {#if isLocationAccessGranted}
                     {#if isNearMosque}
                     <!-- <button class="btn btn-success">Arrived</button> -->
-                                                <input type="checkbox" bind:checked={arrivedBool} id="{child.Name}" name="{child.Name}" value="{child.$id}"  class='checkbox checkbox-success checkbox-md rounded-full' on:change={isArrived}>
+                        <input type="checkbox" bind:checked={arrivedBool} id="{child.Name}" name="{child.Name}" value="{child.$id}"  class='checkbox checkbox-success checkbox-md rounded-full' on:change={isArrived}>
                     {:else}
                     <div class="flex flex-col just-end items-end">
                     {#if arrivedBool}
