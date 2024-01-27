@@ -118,7 +118,7 @@ navigator.geolocation.getCurrentPosition(locationSuccess, locationError, {enable
 // Use callback function as a helper function and call immediately if not in iOS app
 if (!navigator.userAgent.includes('MedianIOS')) {
   median_geolocation_ready();
-}
+} else {
     // Check if geolocation is supported by the browser
     if ("geolocation" in navigator) {
     // Prompt user for permission to access their location
@@ -163,7 +163,8 @@ if (!navigator.userAgent.includes('MedianIOS')) {
     // Geolocation is not supported by the browser
     console.error("Geolocation is not supported by this browser.");
     }
-    });
+}
+});
 
     async function isArrived(e:any) {
         const close = document.getElementById('notify') as HTMLInputElement;
