@@ -109,6 +109,7 @@
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
 
+        isLocationAccessGranted = true;
         // Update the map with the user's new location
         // console.log(`Latitude: ${lat}, longitude: ${lng}`);
         
