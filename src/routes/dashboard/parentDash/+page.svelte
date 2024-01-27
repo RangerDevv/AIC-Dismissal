@@ -104,6 +104,13 @@
     // Define the locationSuccess function
     function locationSuccess(position:any) {
         // Handle the success callback logic here
+        // console.log(position);
+        // Get the user's latitude and longitude coordinates
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        // Update the map with the user's new location
+        // console.log(`Latitude: ${lat}, longitude: ${lng}`);
     }
 
     // Call the getCurrentPosition method with the defined locationSuccess function
