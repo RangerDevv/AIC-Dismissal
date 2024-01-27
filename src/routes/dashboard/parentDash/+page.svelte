@@ -99,10 +99,31 @@
     onMount(async () =>{ 
         listClasses();
         getChildren();
-            // Check if geolocation is supported by the browser
+        // Callback function automatically called when location services initialized in iOS app
+function median_geolocation_ready() {
+// Define the locationSuccess function
+function locationSuccess(position:any) {
+    // Handle the success callback logic here
+}
+
+// Call the getCurrentPosition method with the defined locationSuccess function
+function locationError(error:any) {
+    console.log(error);
+}
+
+const locationOptions = {}; // Declare locationOptions variable
+navigator.geolocation.getCurrentPosition(locationSuccess, locationError, {enableHighAccuracy: true}); // Call the getCurrentPosition method with the defined locationSuccess function
+}
+        
+// Use callback function as a helper function and call immediately if not in iOS app
+if (!navigator.userAgent.includes('MedianIOS')) {
+  median_geolocation_ready();
+}
+    // Check if geolocation is supported by the browser
     if ("geolocation" in navigator) {
     // Prompt user for permission to access their location
     isLocationAccessGranted = true;
+    locationLoading = false;
     navigator.geolocation.watchPosition(
         // Success callback function
         function(position) {
