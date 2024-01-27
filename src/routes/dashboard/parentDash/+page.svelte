@@ -236,7 +236,7 @@ if(close){
                 </div>
                 <div class="flex flex-row gap-3 pr-4">
                     <!-- <button class="btn btn-success">Arrived</button> -->
-                    <p class="font-bold">Status</p>
+                    <p class="font-bold">Arrived</p>
                 </div>
             </div>
         </div>
