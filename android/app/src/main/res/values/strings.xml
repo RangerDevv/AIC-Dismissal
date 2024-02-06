@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">AIC-Dismissal</string>
+    <string name="title_activity_main">AIC-Dismissal</string>
+    <string name="package_name">app.aicdismissal.vercel</string>
+    <string name="custom_url_scheme">app.aicdismissal.vercel</string>
+</resources>
