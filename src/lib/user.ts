@@ -29,10 +29,11 @@ export async function register(email:any, password:any, name:any, birthDate:any)
         });
     } catch (error) {
         console.error(error);
+        return error;
     }
 }
 
-export async function login(email:any, password:any) {
+export async function login(email:any, password:any, errorMessage?:any) {
     try {
         await appwriteUser.createEmailSession(email, password).then((res:any) => {
             console.log(res);
@@ -41,5 +42,6 @@ export async function login(email:any, password:any) {
         goto("/dashboard/parentDash");
     } catch (error) {
         console.error(error);
+        return error;
     }
 }

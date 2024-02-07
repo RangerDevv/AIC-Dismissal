@@ -4,11 +4,14 @@
 
     let email = "";
     let password = "";
+    let errorMsg = "";
 
     $: disabled = !email || !password;
 
     function loginUser() {
-        login(email, password);
+        login(email, password).then((res) => {
+            errorMsg = res as any;
+        });
     }
 
     async function forgotPassword() {
@@ -39,6 +42,7 @@
                 </div>
             </label>
             <button class="btn btn-success mt-5 w-full" type="submit" disabled={disabled}>Login</button>
+            <p class="text-red-500 text-center mt-5">{errorMsg}</p>
             <div class="label">
                 <span class="label-text">Don't have an account? <a class="underline" href="/loginRegister/register">Register</a></span>
             </div>

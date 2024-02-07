@@ -6,12 +6,15 @@
     let password = "";
     let confirmPassword = "";
     let date = "";
+    let errorMsg = "";
 
     $: disabled = !email || !password || !name || !date || !confirmPassword;
 
     function registerUser() {
-        if(password != confirmPassword) return alert('Passwords do not match');
-        register(email, password,name,date);
+        if(password != confirmPassword) return errorMsg = "Passwords do not match";
+        register(email, password,name,date).then((res) => {
+            errorMsg = res as any;
+        });
     }
 
 </script>
@@ -53,6 +56,7 @@
                 <input type="password" placeholder="Type here" class="input input-bordered w-full max-w-xs" bind:value={confirmPassword} />
             </label>
             <button class="btn btn-success mt-3 w-full" disabled={disabled} type="submit">Register</button>
+            <p class="text-red-500 text-center mt-5">{errorMsg}</p>
             <div class="label">
                 <span class="label-text">Already have an account? <a class="underline" href="/loginRegister/login">Login</a></span>
             </div>
