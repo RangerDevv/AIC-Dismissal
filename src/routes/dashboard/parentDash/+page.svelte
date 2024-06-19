@@ -399,7 +399,12 @@ if(close){
     </div>
   </div>
 </div>
-
+<!-- align the footer at the bottom of the page -->
+<footer class="fixed bottom-0 w-full pt-5">
+    <div class="p-2 text-center">
+        <p class="text-gray-400">To request account deletion please go to <a href="/deleteAccount">Delete Account Page</a></p>
+    </div>
+</footer>
 <style>
     .modal-box *{
         transition: all .3s ease;
