@@ -99,109 +99,105 @@
     onMount(async () =>{ 
         listClasses();
         getChildren();
-        // Callback function automatically called when location services initialized in iOS app
-    function median_geolocation_ready() {
-    // Define the locationSuccess function
-    function locationSuccess(position:any) {
-        // Handle the success callback logic here
-        // console.log(position);
-        // Get the user's latitude and longitude coordinates
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
+//         // Callback function automatically called when location services initialized in iOS app
+//     function median_geolocation_ready() {
+//     // Define the locationSuccess function
+//     function locationSuccess(position:any) {
+//         // Handle the success callback logic here
+//         // console.log(position);
+//         // Get the user's latitude and longitude coordinates
+// //         const lat = position.coords.latitude;
+// //         const lng = position.coords.longitude;
 
-        isLocationAccessGranted = true;
-        // Update the map with the user's new location
-        // console.log(`Latitude: ${lat}, longitude: ${lng}`);
+// //         isLocationAccessGranted = true;
+// //         // Update the map with the user's new location
+// //         // console.log(`Latitude: ${lat}, longitude: ${lng}`);
         
-        // check if the user is within 100 meters of the mosque
-        let R = 6371e3; // Earth's radius in meters
-        let φ1 = lat * Math.PI/180; // Convert latitude from degrees to radians
-        let φ2 = mosqueLat * Math.PI/180; // Convert mosque latitude from degrees to radians
-        let Δφ = (mosqueLat-lat) * Math.PI/180; // Difference of latitudes
-        let Δλ = (mosqueLng-lng) * Math.PI/180; // Difference of longitudes
+// //         // check if the user is within 100 meters of the mosque
+// //         let R = 6371e3; // Earth's radius in meters
+// //         let φ1 = lat * Math.PI/180; // Convert latitude from degrees to radians
+// //         let φ2 = mosqueLat * Math.PI/180; // Convert mosque latitude from degrees to radians
+// //         let Δφ = (mosqueLat-lat) * Math.PI/180; // Difference of latitudes
+// //         let Δλ = (mosqueLng-lng) * Math.PI/180; // Difference of longitudes
 
-        let a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
-            Math.cos(φ1) * Math.cos(φ2) *
-            Math.sin(Δλ/2) * Math.sin(Δλ/2);
-        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+// //         let a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+// //             Math.cos(φ1) * Math.cos(φ2) *
+// //             Math.sin(Δλ/2) * Math.sin(Δλ/2);
+// //         let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
-        let distance = R * c; // Distance in meters
+// //         let distance = R * c; // Distance in meters
 
-        isNearMosque = distance < 100 ? true : false;
-        locationLoading = false;
-    }
+// //         isNearMosque = distance < 100 ? true : false;
+// //         locationLoading = false;
+// //     }
 
-    // Call the getCurrentPosition method with the defined locationSuccess function
-    function locationError(error:any) {
-        console.log(error);
-    }
+// //     // Call the getCurrentPosition method with the defined locationSuccess function
+// //     function locationError(error:any) {
+// //         console.log(error);
+// //     }
 
-    const locationOptions = {}; // Declare locationOptions variable
-    navigator.geolocation.getCurrentPosition(locationSuccess, locationError, {enableHighAccuracy: true}); // Call the getCurrentPosition method with the defined locationSuccess function
-    }
+// //     const locationOptions = {}; // Declare locationOptions variable
+// //     navigator.geolocation.getCurrentPosition(locationSuccess, locationError, {enableHighAccuracy: true}); // Call the getCurrentPosition method with the defined locationSuccess function
+// //     }
         
-// Use callback function as a helper function and call immediately if not in iOS app
-// console.log(navigator.userAgent);
-if (navigator.userAgent.includes('MedianIOS')) {
-  median_geolocation_ready();
-} else {
-    // Check if geolocation is supported by the browser
-    if ("geolocation" in navigator) {
-    // Prompt user for permission to access their location
-    isLocationAccessGranted = true;
-    navigator.geolocation.watchPosition(
-        // Success callback function
-        function(position) {
-        // Get the user's latitude and longitude coordinates
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
+// // // Use callback function as a helper function and call immediately if not in iOS app
+// // // console.log(navigator.userAgent);
+// // if (navigator.userAgent.includes('MedianIOS')) {
+// //   median_geolocation_ready();
+// // } else {
+// //     // Check if geolocation is supported by the browser
+// //     if ("geolocation" in navigator) {
+// //     // Prompt user for permission to access their location
+// //     isLocationAccessGranted = true;
+// //     navigator.geolocation.watchPosition(
+// //         // Success callback function
+// //         function(position) {
+// //         // Get the user's latitude and longitude coordinates
+// //         const lat = position.coords.latitude;
+// //         const lng = position.coords.longitude;
 
-        // Update the map with the user's new location
-        // console.log(`Latitude: ${lat}, longitude: ${lng}`);
+// //         // Update the map with the user's new location
+// //         // console.log(`Latitude: ${lat}, longitude: ${lng}`);
 
-        // if the user is within 100 meters of the mosque then send the notification
-        let R = 6371e3; // Earth's radius in meters
-        let φ1 = lat * Math.PI/180; // Convert latitude from degrees to radians
-        let φ2 = mosqueLat * Math.PI/180; // Convert mosque latitude from degrees to radians
-        let Δφ = (mosqueLat-lat) * Math.PI/180; // Difference of latitudes
-        let Δλ = (mosqueLng-lng) * Math.PI/180; // Difference of longitudes
+// //         // if the user is within 100 meters of the mosque then send the notification
+// //         let R = 6371e3; // Earth's radius in meters
+// //         let φ1 = lat * Math.PI/180; // Convert latitude from degrees to radians
+// //         let φ2 = mosqueLat * Math.PI/180; // Convert mosque latitude from degrees to radians
+// //         let Δφ = (mosqueLat-lat) * Math.PI/180; // Difference of latitudes
+// //         let Δλ = (mosqueLng-lng) * Math.PI/180; // Difference of longitudes
 
-        let a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
-            Math.cos(φ1) * Math.cos(φ2) *
-            Math.sin(Δλ/2) * Math.sin(Δλ/2);
-        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+// //         let a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+// //             Math.cos(φ1) * Math.cos(φ2) *
+// //             Math.sin(Δλ/2) * Math.sin(Δλ/2);
+// //         let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
-        let distance = R * c; // Distance in meters
+// //         let distance = R * c; // Distance in meters
 
-        isNearMosque = distance < 100 ? true : false;
-        locationLoading = false;
-        },
-        // Error callback function
-        function(error) {
-        // Handle errors, e.g. user denied location sharing permissions
-        console.error("Error getting user location:", error);
-        isLocationAccessGranted = false;
-        locationLoading = false;
-        }
-    );
-    } else {
-    // Geolocation is not supported by the browser
-    console.error("Geolocation is not supported by this browser.");
-    }
-}
+// //         isNearMosque = distance < 100 ? true : false;
+// //         locationLoading = false;
+// //         },
+// //         // Error callback function
+// //         function(error) {
+// //         // Handle errors, e.g. user denied location sharing permissions
+// //         console.error("Error getting user location:", error);
+// //         isLocationAccessGranted = false;
+// //         locationLoading = false;
+// //         }
+// //     );
+// //     } else {
+// //     // Geolocation is not supported by the browser
+// //     console.error("Geolocation is not supported by this browser.");
+// //     }
+// // }
 });
 
     async function isArrived(e:any) {
-        const close = document.getElementById('notify') as HTMLInputElement;
-if(close){
-        close.click();
-}
-        await appwriteDatabases.updateDocument(DB_ID,COLLECTION.Parents,parentDBID,
+        await appwriteDatabases.updateDocument(DB_ID,COLLECTION.Students,e.target.value,
             {
                 Arrived:e.target.checked
             }
         ).then((res) => {
-            // console.log(res);
+            console.log(res);
             // simulate the click of the close button of the notify modal
         }).catch((err) => {
             console.log(err);
@@ -277,42 +273,7 @@ if(close){
                     <h2 class="text-sm">Class: {child.class.Name}</h2>
                 </div>
                 <div class="flex flex-row gap-10 pr-4">
-                    <!-- {#if locationLoading}
-                    <span class="loading loading-spinner loading-lg mt-5"></span>
-                    {:else}
-                    {#if isLocationAccessGranted}
-                    {#if isNearMosque} -->
-                    <!-- <button class="btn btn-success">Arrived</button> -->
-                        <input type="checkbox" bind:checked={arrivedBool} id="{child.Name}" name="{child.Name}" value="{child.$id}"  class='checkbox checkbox-success checkbox-md rounded-full' on:change={isArrived}>
-                    <!-- {:else}
-                    <div class="flex flex-col just-end items-end">
-                    {#if arrivedBool}
-                    <label for="notify" class="btn btn-ghost outline outline-green-600 text-green-600 m-6" id="warning">Notified</label>
-                    {:else}
-                    <label for="notify" class="btn btn-ghost outline outline-rose-600 text-rose-600 m-2" id="warning">Notify Anyway</label>
-                    {/if}
-                    <p class="w-36 text-sm">Notify when close to the mosque.</p>
-                    </div>
-                    <input type="checkbox" id="notify" class="modal-toggle" />
-                    <div class="modal" role="dialog">
-                    <div class="modal-box">
-                        <h1 class="text-3xl font-bold text-center pt-5">Are you sure you want to notify the mosque?</h1>
-                        <div class="flex flex-col justify-center items-center">
-                            <label class="flex flex-col gap-2 cursor-pointer items-center">
-                            <span class="label-text mt-5 text-lg">Yes</span> 
-                            <input type="checkbox" bind:checked={arrivedBool} id="{child.Name}" name="{child.Name}" value="{child.$id}"  class='checkbox checkbox-success checkbox-lg rounded-full' on:change={isArrived}>
-                            </label>
-                        </div>
-                        <div class="modal-action">
-                            <label for="notify" class="btn btn-error">Close</label>
-                        </div>
-                    </div>
-                    </div>
-                    {/if}
-                    {:else}
-                    <label for="notify" class="btn btn-ghost outline outline-rose-600 text-rose-600 m-6" id="warning">Please Grant Location Access</label>
-                    {/if}
-                    {/if} -->
+                        <input type="checkbox" bind:checked={child.Arrived} id="{child.$id}" name="{child.Name}" value="{child.$id}" class='checkbox checkbox-success rounded-full' on:change={isArrived}>
                 </div>
             </div>
         </div>

@@ -68,7 +68,7 @@
 <main>
     <nav class="navbar bg-green-300">
         <div class="flex-1">
-            <a href="/"><img src="https://www.attawheed.org/uploads/1/1/0/6/110609037/logo-with-text-islamic-center-arabic_1.png" alt="logo" class="h-14 w-auto"/></a>
+            <a href="/" class="text-4xl btn">🏠</a>
         </div>
         {#if loading}
         <div class="flex-1">
@@ -83,20 +83,8 @@
             {#if isLoggedIn}
             {#if teacher}
             <a href="/dashboard/teacherDash/"><button class="btn">All Classroom</button></a>
-            {#if uid == '659b001f1dd2ea90b3ed' || uid == '658c6e971bcb4f11e387'}
-            <ul class="menu menu-horizontal px-1">
-            <li>
-                <details>
-                  <summary class="hover:bg-slate-900 btn text-base">
-                    Admin
-                  </summary>
-                  <ul class="p-2 rounded-t-none bg-slate-800">
-                    <li><a href="/allUsers">Users</a></li>
-                    <!-- <li><a>Logs</a></li> -->
-                  </ul>
-                </details>
-            </li>
-            </ul>
+            {#if uid == '6697ecbf5b1da3cc985e' || uid == '658c6e971bcb4f11e387'}
+            <a href="/allUsers"><button class="btn">Admin</button></a>
             {/if}
             {/if}
             <button class="btn btn-primary" on:click={logout}>Logout</button>
