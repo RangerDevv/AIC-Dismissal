@@ -28,14 +28,31 @@
 
     
         
-    const unsubscribe = browser ? appwriteClient.subscribe(['databases.'+DB_ID+'.collections.'+COLLECTION.Parents+'.documents','databases.'+DB_ID+'.collections.'+COLLECTION.Students+'.documents'], res => {
+    const unsubscribe = browser ? appwriteClient.subscribe(['databases.'+DB_ID+'.collections.'+COLLECTION.Students+'.documents'], res => {
         // console.log('update');
         console.log(res);
         const payload = res.payload as any;
         if (payload.Arrived !== undefined) {
             classStudents.find((child) => child.$id == payload.$id).Arrived = payload.Arrived;
         }
-        // classStudents.find((child) => child.parents.$id == payload.$id).parents.Arrived = payload.Arrived;
+        // if the term recieved exists in the payload then update the recieved value in the classStudents array
+        if(payload.Received !== undefined) {
+            classStudents.find((child) => child.$id == payload.$id).Received = payload.Received;
+        }
+        if(payload.Sent !== undefined) {
+            classStudents.find((child) => child.$id == payload.$id).Sent = payload.Sent;
+        }
+        classStudents = [...classStudents];
+        console.log(classStudents);
+    }) : undefined;
+
+    const unsubscribe2 = browser ? appwriteClient.subscribe(['databases.'+DB_ID+'.collections.'+COLLECTION.Parents+'.documents'], res => {
+        // console.log('update');
+        console.log(res);
+        const payload = res.payload as any;
+        if (payload.Arrived !== undefined) {
+            classStudents.find((child) => child.parents.$id == payload.$id).parents.Arrived = payload.Arrived;
+        }
         // if the term recieved exists in the payload then update the recieved value in the classStudents array
         if(payload.Received !== undefined) {
             classStudents.find((child) => child.$id == payload.$id).Received = payload.Received;
@@ -50,6 +67,7 @@
     onMount(() => {
         return () => {
             unsubscribe!();
+            unsubscribe2!();
         };
     });
 
@@ -117,10 +135,10 @@
             {/each}
         </div>
         <div class="flex flex-col gap-1">
-            {#each classStudents.filter(student => !student.Arrived) as student}
+            {#each classStudents.filter(student => !student.Arrived) || classStudents.filter(student => !student.parent.Arrived) as student}
                 <div class="flex flex-row pl-5 pr-5 pt-2" id="studentList">
                     <div class="flex-1 flex flex-row gap-4">
-                        <input type="checkbox" class="checkbox checkbox-success rounded-full disabled:opacity-100 disabled:bg-transparent outline" checked={student.Arrived} disabled>
+                        <input type="checkbox" class="checkbox checkbox-success rounded-full disabled:opacity-100 disabled:bg-transparent outline" checked={student.Arrived || student.parents.Arrived} disabled>
                         <input type="checkbox" class="checkbox checkbox-info rounded-full disabled:opacity-100 disabled:bg-transparent outline ml-8" checked={student.Received} disabled>
                         <div class="flex flex-col gap-1 pl-6">
                             <h2 class="text-xl">{student.Name}</h2>
