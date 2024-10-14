@@ -254,7 +254,11 @@
         {/each}
     </select>
     <div class="modal-action">
+        {#if newChildName.length > 0 && newChildClass.length > 0}
         <label for="my_modal_6" class="btn btn-success" on:click={addChild}>Add Child</label>
+        {:else}
+        <button disabled class="btn btn-success disabled">Add Child</button>
+        {/if}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <label for="my_modal_6" class="btn btn-error">Close</label>
     </div>
