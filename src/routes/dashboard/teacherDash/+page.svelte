@@ -5,9 +5,6 @@
 
     let classList = [] as any[];
 
-    let todayDate = new Date().toISOString().slice(0,10);
-    console.log(todayDate);
-
 
     async function listClasses() {
         await appwriteDatabases.listDocuments(DB_ID,COLLECTION.Class).then((res) => {
